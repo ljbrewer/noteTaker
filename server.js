@@ -8,7 +8,7 @@ const { nanoid } = require('nanoid');
 
 
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 300;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
