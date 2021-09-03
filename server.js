@@ -17,17 +17,19 @@ app.use(express.static('public'));
 // Routes
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname,'public', 'notes.html')));
 
-
-
-
 app.get('/api/notes', (req, res) => res.json(notesData));
 
 
 app.post('/api/notes', (req, res) => {
        // req.body is available since we're using the body parsing middleware
+     
        notesData.push(req.body)
-       fs.writeFile('./db/db.json', JSON.stringify(notesData)) 
-       req.body.id = nanoid()
+        req.body.id = nanoid()
+       fs.writeFile('./db/db.json', JSON.stringify(notesData), err =>{
+        if (err) throw err;
+       }) 
+      // req.body.id = nanoid()
+      
        res.json(req.body)
 
         }
