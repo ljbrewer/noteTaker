@@ -1,6 +1,6 @@
 // Dependencies
 const express = require('express');
-const notesData = require('./db/db.json');
+let notesData = require('./db/db.json');
 const fs = require('fs');
 const path = require('path');
 const { nanoid } = require('nanoid');
@@ -36,15 +36,23 @@ app.post('/api/notes', (req, res) => {
 
 }
 )
-// app.delete("/api/notes/:id", (req, res) => {
-//         // (1) Get the currently saved array of notes
-//         const { id } = req.params;
-//         // (2) Remove the note referenced by the ID (req.params.id) passed in from the request
-//         const updatenotesData = notesData.filter(id => notesData.id);
-//         const notesData = notesData.splice(id, 1)
-//         // (3) Save the new array back to db.json
-//         db.json = notesData
-// });
+app.delete("/api/notes/:id", (req, res) => {
+        // (1) Get the currently saved array of notes
+        const { id } = req.params;
+        // (2) Remove the note referenced by the ID (req.params.id) passed in from the request
+        notesData = notesData.filter(note =>{
+                if (note.id !== id) {
+                        return true
+                } else return false
+        });
+        
+        // (3) Save the new array back to db.json
+        fs.writeFile('./db/db.json', JSON.stringify(notesData), err => {
+                if (err) throw err;
+        })
+
+        res.json(notesData)
+});
 
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
